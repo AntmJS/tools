@@ -1,0 +1,9 @@
+import {pxTransform} from '@tarojs/taro'
+import IconFont, {IconNames} from './iconfont'
+
+export function Icon(props) {
+  const {size = 48, color = '#000000', name} = props
+  return <IconFont name={name} size={pxTransform(size)} color={color} />
+}
+
+export default Icon

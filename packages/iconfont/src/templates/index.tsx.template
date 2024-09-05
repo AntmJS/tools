@@ -1,0 +1,23 @@
+// @ts-nocheck
+import {View} from '@tarojs/components'
+import {pxTransform} from '@tarojs/taro'
+import {IconNames} from './iconfont'
+
+export interface IconProps {
+  color?: string
+  size?: number
+  name: IconNames
+}
+
+export function Icon(props: IconProps) {
+  const {size = 48, color = '#000000', name} = props
+  const s = pxTransform(size)
+  return (
+    <View
+      className={`#class# #prefix#-${name}`}
+      style={{color: color, fontSize: s, width: s, height: s}}
+    />
+  )
+}
+
+export default Icon

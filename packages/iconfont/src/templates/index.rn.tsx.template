@@ -1,0 +1,16 @@
+// @ts-nocheck
+import {pxTransform} from '@tarojs/taro'
+import IconFont, {IconNames} from './iconfont'
+
+export interface IconProps {
+  color?: string
+  size?: number
+  name: IconNames
+}
+
+export function Icon(props: IconProps) {
+  const {size = 48, color = '#000000', name} = props
+  return <IconFont name={name} size={pxTransform(size)} color={color} />
+}
+
+export default Icon

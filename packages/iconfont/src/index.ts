@@ -4,6 +4,7 @@ import {fetchXml} from 'iconfont-parser'
 import colors from 'colors'
 import getConfig from './getConfig'
 import {generateComponent} from './generateComponent'
+import {getTemplate} from './getTemplate'
 
 /* eslint-disable @typescript-eslint/no-require-imports */
 
@@ -60,20 +61,25 @@ function grabConfigFromScript(str, n) {
   return rst
 }
 
-function transform(url, output, fontFamily, rn) {
+function transform(rn) {
   // eslint-disable-next-line no-async-promise-executor
   return new Promise(async function (resolve, reject) {
-    const config = getConfig(rn, url, output, fontFamily)
+    const config = getConfig()
     if (rn) {
       try {
-        const result = await fetchXml(config.symbol_url)
+        const result = await fetchXml(config.src)
         generateComponent(result, config)
+        const jsxExtension = config.typescript ? '.tsx' : '.js'
+        let componentFile = getTemplate('index.rn' + jsxExtension)
+        componentFile = componentFile.replace('#class#', config.fontFamily)
+        componentFile = componentFile.replace('#prefix#', config.fontClassPrefix)
+        fs.writeFileSync(npath.join(config.components, 'index.rn' + jsxExtension), componentFile)
       } catch (error: any) {
         console.error(colors.red(error?.message || 'Unknown Error'))
         process.exit(1)
       }
     }
-    https.get(config.symbol_url?.replace('.js', '.css'), res => {
+    https.get(config.src?.replace('.js', '.css'), res => {
       let content = ''
       res.on('error', e => {
         reject(e)
@@ -104,13 +110,19 @@ function transform(url, output, fontFamily, rn) {
             })
             res.on('end', () => {
               const base64 = Buffer.concat(chunks).toString('base64')
-              let font = `{font-family: '${config.style_font_family}';src: url(data:font/truetype;charset=utf-8;base64,#BASE64) format('truetype');font-weight: normal;font-style: normal;}`
+              let font = `{font-family: '${config.fontFamily}';src: url(data:font/truetype;charset=utf-8;base64,#BASE64) format('truetype');font-weight: normal;font-style: normal;}`
               font = font.replace('#BASE64', base64)
               content = content.replace(replaceContent, font)
               content = content.replace(/(\d+(\.{0,1}\d+){0,1})px/, (a, b) => {
                 return a.replace(a, `${accMul(b, 2)}px`)
               })
-              fs.writeFileSync(npath.resolve(config.save_style_file), content)
+              fs.writeFileSync(npath.resolve(config.style), content)
+              // 写入组件
+              const jsxExtension = config.typescript ? '.tsx' : '.js'
+              let componentFile = getTemplate('index' + jsxExtension)
+              componentFile = componentFile.replace('#class#', config.fontFamily)
+              componentFile = componentFile.replace('#prefix#', config.fontClassPrefix)
+              fs.writeFileSync(npath.join(config.components, 'index' + jsxExtension), componentFile)
               resolve(null)
             })
           })
@@ -120,9 +132,9 @@ function transform(url, output, fontFamily, rn) {
     })
   })
 }
-async function start(inputPath, outputPath, fontFamily, rn) {
+async function start(rn) {
   try {
-    await transform(inputPath, outputPath, fontFamily, rn)
+    await transform(rn)
     console.info('转换成功')
   } catch (error) {
     console.error(error)
@@ -130,24 +142,12 @@ async function start(inputPath, outputPath, fontFamily, rn) {
   }
 }
 
-let fontFamily = 'iconfont'
-let input = ''
-let output = ''
 let rn = true
 
 process.argv.forEach((val, index) => {
-  if (val === '--input-path') {
-    input = process.argv[index + 1] ?? ''
-  }
-  if (val === '--output-path') {
-    output = process.argv[index + 1] ?? ''
-  }
-  if (val === '--font-family') {
-    fontFamily = process.argv[index + 1] ?? ''
-  }
   if (val === '--no-rn') {
     rn = false
   }
 })
 
-start(input, output, fontFamily, rn)
+start(rn)

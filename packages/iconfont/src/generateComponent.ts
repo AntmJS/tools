@@ -33,19 +33,19 @@ export const generateComponent = (data: XmlData, config: Config) => {
   const svgComponents = new Set<string>()
   const names: string[] = []
   const imports: string[] = []
-  const saveDir = path.resolve(config.save_dir)
-  const jsxExtension = config.use_typescript ? '.tsx' : '.js'
-  const jsExtension = config.use_typescript ? '.ts' : '.js'
+  const saveDir = path.resolve(config.components, 'iconfont')
+  const jsxExtension = config.typescript ? '.tsx' : '.js'
+  const jsExtension = config.typescript ? '.ts' : '.js'
   let cases = ''
   mkdirp.sync(saveDir)
   glob.sync(path.join(saveDir, '*')).forEach(file => fs.unlinkSync(file))
 
-  if (config.use_typescript) {
+  if (config.typescript) {
     svgComponents.add('GProps')
   }
 
   copyTemplate(`helper${jsExtension}`, path.join(saveDir, `helper${jsExtension}`))
-  if (!config.use_typescript) {
+  if (!config.typescript) {
     copyTemplate('helper.d.ts', path.join(saveDir, 'helper.d.ts'))
   }
 
@@ -53,8 +53,8 @@ export const generateComponent = (data: XmlData, config: Config) => {
     let singleFile: string
     const currentSvgComponents = new Set<string>(['Svg'])
     const iconId = item.$.id
-    const iconIdAfterTrim = config.trim_icon_prefix
-      ? iconId.replace(new RegExp(`^${config.trim_icon_prefix}(.+?)$`), (_, value) =>
+    const iconIdAfterTrim = config.fontClassPrefix
+      ? iconId.replace(new RegExp(`^${config.fontClassPrefix}(.+?)$`), (_, value) =>
           value.replace(/^[-_.=+#@!~*]+(.+?)$/, '$1'),
         )
       : iconId
@@ -62,7 +62,7 @@ export const generateComponent = (data: XmlData, config: Config) => {
 
     names.push(iconIdAfterTrim)
 
-    if (config.use_typescript) {
+    if (config.typescript) {
       currentSvgComponents.add('GProps')
     }
 
@@ -82,7 +82,7 @@ export const generateComponent = (data: XmlData, config: Config) => {
     cases += `${whitespace(6)}return <${componentName} key="${index + 1}" {...rest} />;\n`
 
     singleFile = getTemplate('SingleIcon' + jsxExtension)
-    singleFile = replaceSize(singleFile, config.default_icon_size)
+    singleFile = replaceSize(singleFile, 24)
     singleFile = replaceSvgComponents(singleFile, currentSvgComponents)
     singleFile = replaceComponentName(singleFile, componentName)
     singleFile = replaceSingleIconContent(singleFile, generateCase(item, 4))
@@ -90,7 +90,7 @@ export const generateComponent = (data: XmlData, config: Config) => {
 
     fs.writeFileSync(path.join(saveDir, componentName + jsxExtension), singleFile)
 
-    if (!config.use_typescript) {
+    if (!config.typescript) {
       let typeDefinitionFile = getTemplate('SingleIcon.d.ts')
 
       typeDefinitionFile = replaceComponentName(typeDefinitionFile, componentName)
@@ -102,13 +102,13 @@ export const generateComponent = (data: XmlData, config: Config) => {
 
   let iconFile = getTemplate('Icon' + jsxExtension)
 
-  iconFile = replaceSize(iconFile, config.default_icon_size)
+  iconFile = replaceSize(iconFile, 24)
   iconFile = replaceCases(iconFile, cases)
   iconFile = replaceSvgComponents(iconFile, svgComponents)
   iconFile = replaceImports(iconFile, imports)
   iconFile = replaceExports(iconFile, imports)
 
-  if (config.use_typescript) {
+  if (config.typescript) {
     iconFile = replaceNames(iconFile, names)
   } else {
     iconFile = replaceNamesArray(iconFile, names)
@@ -122,9 +122,7 @@ export const generateComponent = (data: XmlData, config: Config) => {
 
   fs.writeFileSync(path.join(saveDir, 'index' + jsxExtension), iconFile)
 
-  console.log(
-    `\n${colors.green('√')} All icons have putted into dir: ${colors.green(config.save_dir)}\n`,
-  )
+  console.log(`\n${colors.green('√')} All icons have putted into dir: ${colors.green(saveDir)}\n`)
 }
 
 const generateCase = (data: XmlData['svg']['symbol'][number], baseIdent: number) => {

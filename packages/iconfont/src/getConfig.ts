@@ -3,68 +3,60 @@ import path from 'path'
 import fs from 'fs'
 import colors from 'colors'
 
+const configPath = path.resolve(process.cwd(), './antm.config.js')
+
 const defaultConfig = {
-  symbol_url: '请参考README.md，复制官网提供的JS链接。如果提供了local_svgs，则url选填',
-  use_typescript: true,
-  save_dir: './src/components/icon/iconfont',
-  save_style_file: './src/iconfont.scss',
-  style_font_family: 'iconfont',
-  trim_icon_prefix: 'icon',
-  default_icon_size: 24,
+  src: '使用iconfont的Symbol链接，即//***.js',
+  fontFamily: 'iconfont',
+  fontClassPrefix: 'icon',
+  typescript: true,
+  components: './src/components/icon',
+  style: './src/iconfont.scss',
 }
 
 export interface Config {
-  symbol_url: string
-  use_typescript: boolean
-  save_dir: string
-  save_style_file: string
-  style_font_family: string
-  trim_icon_prefix: string
-  default_icon_size: number
+  src: string
+  fontFamily: string
+  fontClassPrefix: string
+  typescript?: boolean
+  components: string
+  style: string
 }
 
 let cacheConfig: Config
 
-export default (rn: boolean, url?: string, output?: string, fontFamily?: string) => {
+export default (): Config => {
   if (cacheConfig) {
     return cacheConfig
   }
 
-  const targetFile = path.resolve('iconfont.json')
-  defaultConfig.save_style_file = output || defaultConfig.save_style_file
-  defaultConfig.style_font_family = fontFamily || defaultConfig.style_font_family
+  if (fs.existsSync(configPath)) {
+    const antmConfig: {iconfont: Config} = require(configPath)
+    if (antmConfig.iconfont && typeof antmConfig.iconfont === 'object') {
+      if (!antmConfig.iconfont.src || !/^(?:https?:)?\/\//.test(antmConfig.iconfont.src)) {
+        console.warn(colors.red('请在"antm.config.js" 文件中添加 iconfont.src 字段'))
+        process.exit(1)
+      }
 
-  if (!fs.existsSync(targetFile)) {
-    if (!rn && url) {
-      defaultConfig.symbol_url = url
-      return defaultConfig
+      if (antmConfig.iconfont.src && antmConfig.iconfont.src.indexOf('//') === 0) {
+        antmConfig.iconfont.src = 'http:' + antmConfig.iconfont.src
+      }
+
+      if (antmConfig.iconfont.src.indexOf('//') === 0) {
+        antmConfig.iconfont.src = 'https:' + antmConfig.iconfont.src
+      } else if (antmConfig.iconfont.src.indexOf('http:') === 0) {
+        antmConfig.iconfont.src = antmConfig.iconfont.src.replace('http:', 'https:')
+      }
+
+      cacheConfig = {...defaultConfig, ...antmConfig.iconfont}
+
+      return cacheConfig
+    } else {
+      console.error('请检查antm.config.js文件的配置信息和README的要求是否一致')
+      process.exit(1)
     }
-    if (rn && url) {
-      defaultConfig.symbol_url = url.replace('.css', '.js')
-      return defaultConfig
-    }
-    console.warn(colors.red('"iconfont.json" 文件不存在，请添加文件'))
+  } else {
+    console.error('根目录找不到antm.config.js文件')
     process.exit(1)
   }
-
-  const config = require(targetFile) as Config
-
-  if (!config.symbol_url || !/^(?:https?:)?\/\//.test(config.symbol_url)) {
-    console.warn(colors.red('请在"iconfont.json" 文件中添加 symbol_url 字段'))
-    process.exit(1)
-  }
-
-  if (config.symbol_url && config.symbol_url.indexOf('//') === 0) {
-    config.symbol_url = 'http:' + config.symbol_url
-  }
-
-  if (config.symbol_url.indexOf('//') === 0) {
-    config.symbol_url = 'https:' + config.symbol_url
-  } else if (config.symbol_url.indexOf('http:') === 0) {
-    config.symbol_url = config.symbol_url.replace('http:', 'https:')
-  }
-
-  cacheConfig = {...defaultConfig, ...config}
-
-  return cacheConfig
 }
