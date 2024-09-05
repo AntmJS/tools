@@ -1,0 +1,105 @@
+{
+  "name": "tools",
+  "private": true,
+  "description": "",
+  "scripts": {
+    "preinstall": "npx only-allow pnpm",
+    "eslint": "npx eslint -c eslint.config.js '**/*.{js,jsx,ts,tsx}' && npx tsc -p tsconfig.json --skipLibCheck",
+    "stylelint": "npx stylelint --aei --config stylelint.config.js '**/*.{css,less,scss}'",
+    "prettier": "npx prettier --write '**/*.{js,jsx,ts,tsx,md,html,css,less,scss}'",
+    "build:package": "rm -rf packages/antmui/{types,es} && pnpm -r run build"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.4.0",
+    "@commitlint/config-conventional": "^19.2.2",
+    "@eslint/js": "^9.9.0",
+    "@types/node": "^18.15.11",
+    "@types/react": "^18.2.6",
+    "@types/react-test-renderer": "^18.0.0",
+    "commitizen": "^4.3.0",
+    "cross-env": "^7.0.3",
+    "cz-conventional-changelog": "^3.3.0",
+    "eslint": "^9.9.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-config-taro": "4.0.4",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-prettier": "^5.2.1",
+    "eslint-plugin-react": "^7.35.0",
+    "eslint-plugin-react-hooks": "5.1.0-rc-1d989965-20240821",
+    "globals": "^15.9.0",
+    "husky": "^9.1.5",
+    "lint-staged": "^15.2.9",
+    "postcss": "^8.4.41",
+    "postcss-scss": "^4.0.9",
+    "prettier": "^3.3.3",
+    "sass": "^1.75.0",
+    "stylelint": "^16.8.2",
+    "stylelint-config-prettier": "^9.0.5",
+    "stylelint-config-standard": "^36.0.1",
+    "stylelint-config-taro-rn": "^4.0.4",
+    "stylelint-taro-rn": "^4.0.4",
+    "terser": "^5.31.6",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.5.4",
+    "typescript-eslint": "^8.2.0"
+  },
+  "engines": {
+    "node": ">=18.19.0",
+    "pnpm": ">=9.7.1"
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ],
+    "rules": {
+      "type-enum": [
+        2,
+        "always",
+        [
+          "feat",
+          "fix",
+          "style",
+          "chore",
+          "typings",
+          "docs",
+          "refactor",
+          "test"
+        ]
+      ]
+    }
+  },
+  "config": {
+    "commitizen": {
+      "path": "node_modules/cz-conventional-changelog",
+      "types": {
+        "feat": {
+          "description": "新功能（feature）"
+        },
+        "fix": {
+          "description": "修补bug"
+        },
+        "style": {
+          "description": "格式（不影响代码运行的变动）"
+        },
+        "chore": {
+          "description": "构建过程或辅助工具的变动"
+        },
+        "typings": {
+          "description": "Typescript 类型错误"
+        },
+        "docs": {
+          "description": "文档（documentation）"
+        },
+        "refactor": {
+          "description": "重构（既不是新增功能，也不是修改bug的代码变动）"
+        },
+        "test": {
+          "description": "增加或修改测试用例"
+        }
+      }
+    }
+  },
+  "dependencies": {
+    "@tarojs/taro": "^4.0.5"
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "name": "@antmjs/upload-tencent",
+  "version": "3.0.0",
+  "main": "dist/index.js",
+  "author": "三少 <hi_sanshao@outlook.com>",
+  "description": "常用工具",
+  "type": "module",
+  "license": "MIT",
+  "bin": {
+    "antm-upload-tencent": "dist/index.js"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
+  "keywords": [
+    "miniprogram",
+    "upload"
+  ],
+  "repository": {
+    "type": "https",
+    "url": "https://github.com/AntmJS/tools.git"
+  },
+  "bugs": {
+    "url": "https://github.com/AntmJS/tools/issues/new"
+  },
+  "engines": {
+    "node": ">=18.19.0",
+    "pnpm": ">=9.7.1"
+  },
+  "scripts": {
+    "watch": "rm -rf ./dist && npx tsc -p tsconfig.build.json --watch --incremental",
+    "build": "rm -rf ./dist && npx tsc -p tsconfig.build.json && sh terser.sh"
+  },
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "commander": "^6.1.0",
+    "cos-nodejs-sdk-v5": "^2.14.6",
+    "inquirer": "^7.3.3"
+  }
+}

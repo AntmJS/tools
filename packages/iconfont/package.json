@@ -1,0 +1,46 @@
+{
+  "name": "@antmjs/iconfont",
+  "version": "3.0.0",
+  "main": "dist/index.js",
+  "author": "三少 <hi_sanshao@outlook.com>",
+  "description": "常用工具",
+  "license": "MIT",
+  "bin": {
+    "antm-icon": "dist/index.js"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
+  "keywords": [
+    "iconfont",
+    "taro"
+  ],
+  "repository": {
+    "type": "https",
+    "url": "https://github.com/AntmJS/tools.git"
+  },
+  "bugs": {
+    "url": "https://github.com/AntmJS/tools/issues/new"
+  },
+  "engines": {
+    "node": ">=18.19.0",
+    "pnpm": ">=9.7.1"
+  },
+  "scripts": {
+    "watch": "rm -rf ./dist && npx tsc -p tsconfig.build.json --watch --incremental",
+    "build": "rm -rf ./dist && npx tsc -p tsconfig.build.json && sh terser.sh"
+  },
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "colors": "^1.4.0",
+    "commander": "^6.1.0",
+    "cos-nodejs-sdk-v5": "^2.14.6",
+    "glob": "^11.0.0",
+    "iconfont-parser": "^1.0.0",
+    "inquirer": "^7.3.3",
+    "lodash.camelcase": "^4.3.0",
+    "lodash.upperfirst": "^4.3.1",
+    "mkdirp": "^3.0.1"
+  }
+}

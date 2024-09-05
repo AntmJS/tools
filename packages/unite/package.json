@@ -1,0 +1,40 @@
+{
+  "name": "@antmjs/unite",
+  "version": "3.0.0",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "typings": "types/index.d.ts",
+  "author": "三少 <hi_sanshao@outlook.com>",
+  "description": "统一的开发模式",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
+  "keywords": [
+    "unite"
+  ],
+  "repository": {
+    "type": "https",
+    "url": "https://github.com/AntmJS/tools.git"
+  },
+  "bugs": {
+    "url": "https://github.com/AntmJS/tools/issues/new"
+  },
+  "engines": {
+    "node": ">=18.19.0",
+    "pnpm": ">=9.7.1"
+  },
+  "scripts": {
+    "watch": "rm -rf ./dist && npx tsc -p tsconfig.build.json --watch --incremental",
+    "build": "rm -rf ./dist && npx tsc -p tsconfig.build.json && sh terser.sh"
+  },
+  "dependencies": {
+    "@antmjs/utils": "workspace:^"
+  },
+  "peerDependencies": {
+    "@tarojs/components": "^4.0.4",
+    "@tarojs/taro": "^4.0.4",
+    "react": "^18.2.0"
+  }
+}
