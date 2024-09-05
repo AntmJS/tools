@@ -3,7 +3,7 @@ import {pxTransform} from '@tarojs/taro'
 import {IconNames} from './iconfont'
 
 export function Icon(props) {
-  const {size = 48, color = '#000000', name} = props
+  const {size = #size#, color = '#color#', name} = props
   const s = pxTransform(size)
   return (
     <View

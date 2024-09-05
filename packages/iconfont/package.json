@@ -1,6 +1,6 @@
 {
   "name": "@antmjs/iconfont",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "main": "dist/index.js",
   "author": "三少 <hi_sanshao@outlook.com>",
   "description": "常用工具",

@@ -25,6 +25,8 @@ module.exports = {
     typescript: true,
     components: './src/components/icon',
     style: './src/iconfont.scss',
+    defaultSize: 48,
+    defaultColor: '#969799',
   },
 }
 ```

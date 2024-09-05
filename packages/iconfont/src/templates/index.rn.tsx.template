@@ -9,7 +9,7 @@ export interface IconProps {
 }
 
 export function Icon(props: IconProps) {
-  const {size = 48, color = '#000000', name} = props
+  const {size = #size#, color = '#color#', name} = props
   return <IconFont name={name} size={pxTransform(size)} color={color} />
 }
 

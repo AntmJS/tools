@@ -73,6 +73,8 @@ function transform(rn) {
         let componentFile = getTemplate('index.rn' + jsxExtension)
         componentFile = componentFile.replace('#class#', config.fontFamily)
         componentFile = componentFile.replace('#prefix#', config.fontClassPrefix)
+        componentFile = componentFile.replace('#size#', String(config.defaultSize))
+        componentFile = componentFile.replace('#color#', config.defaultColor)
         fs.writeFileSync(npath.join(config.components, 'index.rn' + jsxExtension), componentFile)
       } catch (error: any) {
         console.error(colors.red(error?.message || 'Unknown Error'))
@@ -122,6 +124,8 @@ function transform(rn) {
               let componentFile = getTemplate('index' + jsxExtension)
               componentFile = componentFile.replace('#class#', config.fontFamily)
               componentFile = componentFile.replace('#prefix#', config.fontClassPrefix)
+              componentFile = componentFile.replace('#size#', String(config.defaultSize))
+              componentFile = componentFile.replace('#color#', config.defaultColor)
               fs.writeFileSync(npath.join(config.components, 'index' + jsxExtension), componentFile)
               resolve(null)
             })

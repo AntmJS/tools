@@ -12,15 +12,19 @@ const defaultConfig = {
   typescript: true,
   components: './src/components/icon',
   style: './src/iconfont.scss',
+  defaultSize: 48,
+  defaultColor: '#969799',
 }
 
 export interface Config {
   src: string
   fontFamily: string
   fontClassPrefix: string
-  typescript?: boolean
   components: string
   style: string
+  typescript: boolean
+  defaultSize: number
+  defaultColor: string
 }
 
 let cacheConfig: Config
