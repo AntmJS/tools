@@ -26,7 +26,6 @@
     "pnpm": ">=9.7.1"
   },
   "scripts": {
-    "publish": "pnpm publish",
     "watch": "rm -rf ./dist && npx tsc -p tsconfig.build.json --watch --incremental",
     "build": "rm -rf ./dist && npx tsc -p tsconfig.build.json && sh terser.sh"
   },
