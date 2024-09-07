@@ -1,10 +1,9 @@
 {
   "name": "@antmjs/upload-tencent",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "main": "dist/index.js",
   "author": "三少 <hi_sanshao@outlook.com>",
   "description": "常用工具",
-  "type": "module",
   "license": "MIT",
   "bin": {
     "antm-upload-tencent": "dist/index.js"
