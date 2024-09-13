@@ -1,5 +1,5 @@
 import React, {forwardRef, useEffect, useRef, useState} from 'react'
-import Taro, {useDidHide, useDidShow, useReady, useRouter} from '@tarojs/taro'
+import Taro, {useDidHide, useDidShow, useReady, useRouter, useLoad, useUnload} from '@tarojs/taro'
 import {UniteContext} from './context'
 
 let catchMethod: any
@@ -267,33 +267,30 @@ function useContainer(config: any, props: any, options: any) {
   // 一般不需要用到，因为页面级的错误通常是传递给render函数去渲染错误页面即可
   insRef.current.error = error
 
-  useEffect(
-    function () {
-      const flag = flagRef
-      const onUnload = insRef.current?.onUnload
-      insRef.current?.onLoad?.()
-      if (!options.page) {
-        insRef.current?.onShow?.()
-      }
+  useEffect(() => {
+    const flag = flagRef
+    return () => {
+      flag.current.__mounted = false
+    }
+  }, [])
 
-      return function (): void {
-        setError(undefined)
-        flag.current.__mounted = false
-        onUnload?.()
-      }
-    },
-    [options.page],
-  )
+  useLoad(function () {
+    insRef.current?.onLoad?.()
+    if (!options.page) {
+      flagRef.current?.onShow?.()
+    }
+  })
+
+  useUnload(function () {
+    insRef.current?.onUnload?.()
+  })
 
   useReady(function () {
     insRef.current?.onReady?.()
   })
 
   useDidShow(function () {
-    // 确保先执行useEffect(() => {}, [])
-    setTimeout(() => {
-      insRef.current?.onShow?.()
-    }, 30)
+    insRef.current?.onShow?.()
   })
 
   useDidHide(function () {
