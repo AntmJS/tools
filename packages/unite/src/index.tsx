@@ -266,24 +266,44 @@ function useContainer(config: any, props: any, options: any) {
   // 将页面级错误也挂到实例对象，方便开发通过this.error取值
   // 一般不需要用到，因为页面级的错误通常是传递给render函数去渲染错误页面即可
   insRef.current.error = error
-
-  useEffect(() => {
-    const flag = flagRef
-    return () => {
-      flag.current.__mounted = false
-    }
-  }, [])
+  const _loadref = useRef(false)
+  const _unloadref = useRef(false)
 
   useLoad(function () {
-    insRef.current?.onLoad?.()
-    if (!options.page) {
-      flagRef.current?.onShow?.()
+    if (!_loadref.current) {
+      _loadref.current = true
+      insRef.current?.onLoad?.()
+      if (!options.page) {
+        flagRef.current?.onShow?.()
+      }
     }
   })
 
   useUnload(function () {
-    insRef.current?.onUnload?.()
+    if (!_unloadref.current) {
+      _unloadref.current = true
+      insRef.current?.onUnload?.()
+    }
   })
+
+  useEffect(() => {
+    if (!_loadref.current) {
+      _loadref.current = true
+      insRef.current?.onLoad?.()
+      if (!options.page) {
+        flagRef.current?.onShow?.()
+      }
+    }
+    const onUnload = insRef.current?.onUnload
+    const flag = flagRef
+    return () => {
+      if (!_unloadref.current) {
+        _unloadref.current = true
+        onUnload?.()
+      }
+      flag.current.__mounted = false
+    }
+  }, [options.page])
 
   useReady(function () {
     insRef.current?.onReady?.()
