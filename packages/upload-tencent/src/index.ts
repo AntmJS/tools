@@ -35,6 +35,7 @@ program
   .usage('[command] <options ...>')
   .option('-d, --dir <dir>', 'The dir you need to upload.')
   .option('-fp, --file-path <filePath>', 'The file path you need to upload.')
+  .option('-td, --target-dir <targetDir>', 'The target dir you need to upload.')
   .option('-er, --exclude-regexp <excludeRegexp>', 'The file path you want to exclude to upload.')
   .option('-r, --redirect', 'upload redirect')
   .on('--help', () => {

@@ -164,7 +164,9 @@ async function upload(program) {
   const md5 = crypto.createHash('md5')
   md5.update(`${program.filePath || program.dir}${Math.random()}`)
   const token = md5.digest('hex').substring(0, 5).toUpperCase()
-  program.targetDir = npath.join('dcos', `${util.formatTime(Date.now(), 'YYYY/MM/DD')}`, token)
+  if (!program.targetDir) {
+    program.targetDir = npath.join('dcos', `${util.formatTime(Date.now(), 'YYYY/MM/DD')}`, token)
+  }
   console.warn(chalk.magentaBright('Notice: chinese and spaces in filePath will be ignored.'))
 
   if (program.filePath) {
