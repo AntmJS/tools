@@ -38,6 +38,7 @@ program
   .option('-td, --target-dir <targetDir>', 'The target dir you need to upload.')
   .option('-er, --exclude-regexp <excludeRegexp>', 'The file path you want to exclude to upload.')
   .option('-r, --redirect', 'upload redirect')
+  .option('-nrf, --no-random-filename', 'no random filename')
   .on('--help', () => {
     console.info()
     console.info('  Example:')

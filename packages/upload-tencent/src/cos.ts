@@ -194,8 +194,9 @@ async function upload(program) {
       }
 
       if (program.filePath) {
+        const replace = program.randomFilename ? true : false
         const baseDir = npath.dirname(program.filePath)
-        const file = generateTargetFilePath(program.targetDir, baseDir, program.filePath, true)
+        const file = generateTargetFilePath(program.targetDir, baseDir, program.filePath, replace)
         await uploadToTencentRemote(file, program.targetDir)
       }
       // end 微信上传
