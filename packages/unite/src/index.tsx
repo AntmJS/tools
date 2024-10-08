@@ -274,7 +274,7 @@ function useContainer(config: any, props: any, options: any) {
       _loadref.current = true
       insRef.current?.onLoad?.()
       if (!options.page) {
-        flagRef.current?.onShow?.()
+        insRef.current?.onShow?.()
       }
     }
   })
@@ -291,7 +291,7 @@ function useContainer(config: any, props: any, options: any) {
       _loadref.current = true
       insRef.current?.onLoad?.()
       if (!options.page) {
-        flagRef.current?.onShow?.()
+        insRef.current?.onShow?.()
       }
     }
     const onUnload = insRef.current?.onUnload
