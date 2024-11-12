@@ -2,12 +2,13 @@
 /* eslint-disable */
 
 import React, { FunctionComponent } from 'react';
-import { ViewProps } from 'react-native';
+import { ViewProps, ColorValue, Insets } from 'react-native';
 #svgComponents#
 
 interface Props extends GProps, ViewProps {
   size?: number;
-  color?: string | string[];
+  color?: ColorValue;
+  hitSlop?: Insets | number | undefined;
 }
 
 #xml#

@@ -1,7 +1,7 @@
 /* eslint-disable */
 
 /**
- * @param {string | string[] | undefined} color
+ * @param {any} color
  * @param {number} index
  * @param {string} defaultColor
  * @return {string}
